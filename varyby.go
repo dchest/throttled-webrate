@@ -21,7 +21,7 @@ func VaryByPathAndIP(r *http.Request) string {
 func extractIP(addr string) string {
 	ip, _, err := net.SplitHostPort(addr)
 	if err != nil {
-		return ""
+		return addr
 	}
 	return ip
 }
