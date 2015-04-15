@@ -43,9 +43,6 @@ import (
 	"github.com/PuerkitoBio/throttled"
 )
 
-// Static check to ensure that rateLimiter implements Limiter.
-var _ throttled.Limiter = (*rateLimiter)(nil)
-
 // RateLimit creates a throttler that limits the number of requests allowed
 // in a certain time window defined by the Quota q. The q parameter specifies
 // the requests per time window, and it is silently set to at least 1 request
