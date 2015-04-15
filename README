@@ -1,0 +1,33 @@
+webrate
+-------
+
+
+Package webrate contains a modified RateLimit function for
+http://github.com/PuerkitoBio/throttled, which rate limits only specified
+HTTP methods and doesn't add headers to response.
+
+
+EXAMPLE
+
+	import (
+		"net/http"
+
+		"github.com/PuerkitoBio/throttled"
+		"github.com/PuerkitoBio/throttled/store"
+		"github.com/dchest/throttled-webrate"
+	)
+
+	func main() {
+
+		// ...
+
+		th := webrate.RateLimit(
+			throttled.PerMin(30),
+			[]string{"POST"},
+			&throttled.VaryBy{Custom: webrate.VaryByPathAndIP},
+			store.NewMemStore(1000))
+		
+		http.Handle("/login", th.Throttle(loginHandler))
+
+		// ...
+	}
