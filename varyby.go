@@ -6,14 +6,18 @@ import (
 )
 
 // VaryByIP is a custom "vary by" function for throttled, which varies request
-// based on client's IP address and X-Real-IP header.
-func VaryByIP(r *http.Request) string {
-	return extractIP(r.RemoteAddr) + "\n" + r.Header.Get("X-Real-IP")
+// based on client's IP address from the given header.  If header is empty,
+// extracts IP address from r.RemoteAddr.
+func VaryByIP(r *http.Request, headerName string) string {
+	if headerName == "" {
+		return extractIP(r.RemoteAddr)
+	}
+	return extractIP(r.Header.Get(headerName))
 }
 
 // VaryByPathAndIP is like VaryByIP but also adds request path.
-func VaryByPathAndIP(r *http.Request) string {
-	return r.URL.Path + "\n" + VaryByIP(r)
+func VaryByPathAndIP(r *http.Request, headerName string) string {
+	return r.URL.Path + "\n" + VaryByIP(r, headerName)
 }
 
 // extractIP extracts IP address (or host) from the given string,
