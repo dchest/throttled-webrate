@@ -3,21 +3,27 @@ package webrate
 import (
 	"net"
 	"net/http"
+
+	"github.com/PuerkitoBio/throttled"
 )
 
-// VaryByIP returns a custom "vary by" function for throttled, which varies
-// request based on client's IP address from the given header.  If header is
-// empty, extracts IP address from r.RemoteAddr.
-func VaryByIP(headerName string) func(r *http.Request) string {
-	return func(r *http.Request) string {
-		return getRequestIP(r, headerName)
+// VaryByIP returns a *throttled.VaryBy, which varies request based on client's
+// IP address from the given header.  If header is empty, extracts IP address
+// from r.RemoteAddr.
+func VaryByIP(headerName string) *throttled.VaryBy {
+	return &throttled.VaryBy{
+		Custom: func(r *http.Request) string {
+			return getRequestIP(r, headerName)
+		},
 	}
 }
 
 // VaryByPathAndIP is like VaryByIP but also adds request path.
-func VaryByPathAndIP(headerName string) func(r *http.Request) string {
-	return func(r *http.Request) string {
-		return r.URL.Path + "\n" + getRequestIP(r, headerName)
+func VaryByPathAndIP(headerName string) *throttled.VaryBy {
+	return &throttled.VaryBy{
+		Custom: func(r *http.Request) string {
+			return r.URL.Path + "\n" + getRequestIP(r, headerName)
+		},
 	}
 }
 
