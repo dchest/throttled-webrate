@@ -24,7 +24,7 @@ EXAMPLE
 		th := webrate.RateLimit(
 			throttled.PerMin(30),
 			[]string{"POST"},
-			&throttled.VaryBy{Custom: webrate.VaryByPathAndIP},
+			webrate.VaryByPathAndIP("X-Real-IP"),
 			store.NewMemStore(1000))
 		
 		http.Handle("/login", th.Throttle(loginHandler))
