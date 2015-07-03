@@ -1,11 +1,22 @@
 webrate
--------
+=======
 
 
 Package webrate contains a modified RateLimit function for
 http://github.com/PuerkitoBio/throttled, which rate limits only specified
 HTTP methods and doesn't add headers to response.
 
+Stable version
+--------------
+
+A stable version of this package with commercial support, along with a stable
+version of throttled, is available through StableLib:
+
+https://stablelib.com/v1/net/throttled-webrate/
+
+
+Development version
+-------------------
 
 EXAMPLE
 
@@ -26,7 +37,7 @@ EXAMPLE
 			[]string{"POST"},
 			webrate.VaryByPathAndIP("X-Real-IP"),
 			store.NewMemStore(1000))
-		
+
 		http.Handle("/login", th.Throttle(loginHandler))
 
 		// ...
